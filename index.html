@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEAL.EXE</title>
+<style>
+:root{--ink:#3a1630;--pink:#d4789c;--cream:#f8ebe9}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{display:grid;place-items:center;overflow:hidden;font-family:"Courier New",ui-monospace,monospace;background:#fbe6ee;transition:opacity .9s,filter .9s}
+body.leave{opacity:0;filter:blur(6px)}
+/* living background */
+.bg{position:fixed;inset:0;overflow:hidden;z-index:0}
+.blob{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(60px);opacity:.75;animation:drift 18s ease-in-out infinite alternate}
+.b1{background:#f6d3b5;top:-20%;right:-10%}.b2{background:#f4b9d2;bottom:-25%;left:-15%;animation-duration:22s}.b3{background:#d5c4ea;bottom:-20%;right:-15%;animation-duration:26s}
+@keyframes drift{to{transform:translate(8vw,-6vh) scale(1.15)}}
+.heart{position:absolute;bottom:-60px;color:#f29bbd;opacity:0;animation:rise linear infinite}
+@keyframes rise{10%{opacity:.55}90%{opacity:.4}to{transform:translate(var(--dx),-115vh) rotate(var(--rot));opacity:0}}
+/* window */
+.win{position:relative;z-index:1;width:min(92vw,520px);background:var(--pink);border:3px solid var(--ink);border-radius:8px;box-shadow:9px 9px 0 var(--ink);overflow:hidden;user-select:none;-webkit-user-select:none;animation:pop .9s cubic-bezier(.2,1.4,.4,1) both,bob 5s 1s ease-in-out infinite}
+@keyframes pop{from{transform:scale(.6) translateY(40px);opacity:0}}
+@keyframes bob{50%{transform:translateY(-7px)}}
+.bar{height:48px;display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:3px solid var(--ink);font-weight:700;letter-spacing:.25em;font-size:13px;color:var(--ink);background:linear-gradient(90deg,#d4789c,#e594b3,#d4789c);background-size:200%;animation:slide 6s linear infinite}
+@keyframes slide{to{background-position:-200% 0}}
+.bar i{width:16px;height:16px;border:2px solid var(--ink);background:#fbeaf0}
+.bar i:nth-child(2){animation:blink 3s infinite}.bar i:nth-child(3){animation:blink 3s 1s infinite}
+@keyframes blink{50%{background:#ffd95a}}
+.bar span{margin-left:auto}
+.stage{position:relative;height:min(78vw,380px);overflow:hidden;background:#f9c6da}
+.rays{position:absolute;left:50%;top:50%;width:200%;aspect-ratio:1;margin:-100% 0 0 -100%;background:repeating-conic-gradient(from 0deg,rgba(255,244,190,.9) 0 8deg,rgba(255,170,205,.7) 8deg 16deg);animation:spin 14s linear infinite;-webkit-mask:radial-gradient(circle,#000 0,transparent 36%);mask:radial-gradient(circle,#000 0,transparent 36%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reveal{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--ink);font-weight:700;letter-spacing:.2em;font-size:14px;background:radial-gradient(circle,#fff6d8,#f7a8c6)}
+.reveal b{display:block;font-size:60px;filter:drop-shadow(0 0 14px #fff);animation:beat 1s infinite}
+@keyframes beat{50%{transform:scale(1.22)}}
+/* curtains */
+.curtain{position:absolute;top:0;bottom:0;width:50%;will-change:transform;overflow:hidden;
+background:repeating-linear-gradient(90deg,#7a2450 0 14px,#b44d7c 14px 30px,#d06590 30px 36px,#8e2f5a 36px 52px)}
+.curtain::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 40px,rgba(255,220,235,.22) 40px 52px,transparent 52px 104px);animation:ripple 5s ease-in-out infinite alternate}
+@keyframes ripple{from{transform:translateX(-26px) skewX(-2deg)}to{transform:translateX(26px) skewX(2deg)}}
+.curtain::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.3),transparent 30%,transparent 70%,rgba(0,0,0,.3)),linear-gradient(rgba(0,0,0,.35),transparent 30%,transparent 80%,rgba(0,0,0,.25))}
+.l{left:0;transform-origin:left}.r{right:0;transform-origin:right}
+.valance{position:absolute;top:0;left:0;right:0;height:22%;z-index:3;background:linear-gradient(#6d3a58,#b44d7c 70%,#a63f6f);box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.valance svg{position:absolute;left:0;bottom:-1px;width:100%;height:60%}
+.rope{position:absolute;left:50%;top:18%;bottom:0;width:10px;margin-left:-5px;z-index:2;background:linear-gradient(90deg,#9a6c0c,#f6d65a,#9a6c0c)}
+.rope::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(255,255,255,.8) 50%,transparent 60%);background-size:100% 200%;animation:glint 3s linear infinite}
+@keyframes glint{from{background-position:0 -100%}to{background-position:0 100%}}
+.tassel-w{position:absolute;left:50%;top:15%;width:26px;margin-left:-13px;z-index:4;transform-origin:50% 0;animation:swing 2.8s ease-in-out infinite}
+@keyframes swing{0%,100%{rotate:-5deg}50%{rotate:5deg}}
+.ball{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3a8,#d9a521 60%,#8a5f08);box-shadow:0 0 12px #ffd95a}
+.fringe{margin:-2px 3px 0;height:24px;background:repeating-linear-gradient(90deg,#c8921a 0 3px,transparent 3px 6px)}
+.front{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-top:34px;transition:opacity .4s,transform .6s}
+.front.gone{opacity:0;transform:scale(1.4)}
+.seal{position:relative;width:132px;height:132px;display:grid;place-items:center;cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;outline:none}
+.pulse{position:absolute;inset:8px;border-radius:50%;border:2px solid rgba(255,255,255,.8);animation:pulse 2.4s ease-out infinite;pointer-events:none}
+.pulse+.pulse{animation-delay:1.2s}
+@keyframes pulse{from{transform:scale(.8);opacity:.9}to{transform:scale(1.9);opacity:0}}
+.petals{position:absolute;inset:-18px;width:calc(100% + 36px);height:calc(100% + 36px);pointer-events:none}
+.ring{position:absolute;inset:0;transform:rotate(-90deg);pointer-events:none;filter:drop-shadow(0 0 6px #ffd95a)}
+.btn{position:relative;width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 50% 22%,#f6b4cd 0 22%,var(--pink) 23%);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink),0 0 22px rgba(255,255,255,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;font-size:9px;font-weight:700;letter-spacing:.25em;transition:box-shadow .1s,translate .1s;overflow:hidden;animation:breathe 2s ease-in-out infinite}
+@keyframes breathe{50%{filter:brightness(1.12)}}
+.btn::after{content:"";position:absolute;top:-20%;left:-60%;width:40%;height:140%;background:rgba(255,255,255,.55);transform:skewX(-20deg);animation:shine 3.5s infinite}
+@keyframes shine{0%,60%{left:-60%}100%{left:130%}}
+.seal.hold .btn{box-shadow:1px 1px 0 var(--ink),0 0 30px #ffd95a;translate:4px 4px}
+.btn svg{width:26px;height:26px;animation:beat 1.2s infinite}
+.plate{position:relative;background:var(--cream);border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);padding:9px 18px;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--ink);text-align:center;animation:wob 3s ease-in-out infinite}
+@keyframes wob{50%{transform:translateY(-3px) rotate(-.6deg)}}
+.plate::before,.plate::after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--pink);border:2px solid var(--ink);top:-5px;left:-5px}
+.plate::after{top:auto;left:auto;bottom:-5px;right:-5px}
+canvas{position:absolute;inset:0;z-index:7;pointer-events:none;width:100%;height:100%}
+.flash{position:absolute;inset:0;z-index:8;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:fl .9s ease-out}
+@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+
+/* vault lock */
+.lock{display:none;position:relative;padding:22px 20px 18px;background:radial-gradient(ellipse at 50% 0,#a63f6f 0,#5e1f45 38%,#2a0f26 100%);color:#fbeaf0;text-align:center;overflow:hidden}
+.lock.show{display:block;animation:lockin .8s cubic-bezier(.2,1.2,.4,1) both}
+@keyframes lockin{from{opacity:0;transform:scale(.92)}}
+.lock::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgba(255,170,210,.18) 1px,transparent 2px) 0 0/34px 34px;animation:stars 12s linear infinite;pointer-events:none}
+@keyframes stars{to{background-position:0 -68px}}
+.avatar{position:relative;width:88px;height:88px;margin:0 auto;border-radius:50%;border:3px solid var(--ink);background:radial-gradient(circle at 35% 30%,#f6b4cd,#d4789c 60%,#8e2f5a) center/cover;box-shadow:0 0 0 3px #f08fb4,0 0 26px rgba(255,150,195,.7);display:grid;place-items:center;font-size:38px;color:#3a1630;cursor:pointer;animation:glow 3s ease-in-out infinite;transition:transform .2s}
+.avatar:active{transform:scale(.92) rotate(-4deg)}
+@keyframes glow{50%{box-shadow:0 0 0 3px #f08fb4,0 0 42px rgba(255,170,210,.95)}}
+.mini{position:relative;color:#f08fb4;font-size:14px;margin:8px 0 10px;animation:beat 1.2s infinite}
+.lbl{position:relative;display:flex;align-items:center;gap:12px;font-size:10px;letter-spacing:.3em;color:#f4a9c3;margin-bottom:14px}
+.lbl::before,.lbl::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,#d4789c)}.lbl::after{transform:scaleX(-1)}
+.dots{position:relative;display:flex;justify-content:center;gap:clamp(22px,8vw,40px);align-items:center;height:58px;margin-bottom:16px;background:#1d0a1a;border:2px solid var(--ink);border-radius:12px;box-shadow:inset 0 4px 12px #000,0 0 0 1px rgba(240,143,180,.3)}
+.dots i{width:10px;height:10px;border-radius:50%;background:#5a2a4d;transition:.2s}
+.dots i.on{background:#fff;box-shadow:0 0 12px 3px #ff9fc6;transform:scale(1.2)}
+.dots.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+.dots.ok i{background:#ffd95a;box-shadow:0 0 14px 4px #ffd95a;transform:scale(1.3)}
+.pad{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 18px;max-width:340px;margin:0 auto}
+.key{height:clamp(42px,7.5vh,58px);border-radius:14px;border:2px solid var(--ink);background:linear-gradient(#5c2146,#3a1630);color:#f8ebe9;font:inherit;font-size:20px;cursor:pointer;box-shadow:0 4px 0 var(--ink),inset 0 1px 0 rgba(255,200,225,.25);transition:transform .08s,box-shadow .08s,background .2s;-webkit-tap-highlight-color:transparent;animation:keyin .5s calc(var(--i)*45ms) backwards}
+@keyframes keyin{from{opacity:0;transform:translateY(16px) scale(.8)}}
+.key:hover{background:linear-gradient(#7a2c5c,#4a1c3d)}
+.key:active{transform:translateY(4px);box-shadow:0 0 0 var(--ink),0 0 20px #f08fb4}
+.dotkey{display:grid;place-items:center}.dotkey::after{content:"";width:7px;height:7px;border-radius:50%;background:#ff7aa8;box-shadow:0 0 10px #ff7aa8;animation:blink 2s infinite}
+.hint{position:relative;margin-top:16px;font-size:10px;letter-spacing:.15em;color:#c78aa6;min-height:14px;transition:color .3s}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<script>
+const bg=document.querySelector('.bg');
+for(let i=0;i<16;i++){const h=document.createElement('div');h.className='heart';h.textContent=Math.random()>.5?'♥':'♡';
+h.style.cssText=`left:${Math.random()*100}%;font-size:${14+Math.random()*30}px;animation-duration:${9+Math.random()*10}s;animation-delay:${-Math.random()*16}s;--dx:${(Math.random()-.5)*160}px;--rot:${(Math.random()-.5)*80}deg`;bg.appendChild(h)}
+</script>
+<div class="win">
+  <div class="bar"><i></i><i></i><i></i><span>SEAL.EXE</span></div>
+  <div class="stage" id="stage">
+    <div class="reveal"><div class="rays"></div><div style="position:relative"><b>♥</b>SEAL BROKEN<br><small>OPENING...</small></div></div>
+    <div class="curtain l" id="cl"></div><div class="curtain r" id="cr"></div>
+    <div class="rope" id="rope"></div>
+    <div class="valance"><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 10 Q25 28 50 22 Q75 28 100 10" fill="none" stroke="#d9a521" stroke-width="1.6"/></svg></div>
+    <div class="tassel-w" id="tassel"><div class="ball"></div><div class="fringe"></div></div>
+    <div class="front" id="front">
+      <div class="seal" id="seal" tabindex="0" role="button" aria-label="Hold to open">
+        <div class="pulse"></div><div class="pulse"></div>
+        <svg class="petals" id="petals" viewBox="-80 -80 160 160"></svg>
+        <svg class="ring" viewBox="0 0 132 132"><circle cx="66" cy="66" r="62" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="4"/>
+        <circle id="arc" cx="66" cy="66" r="62" fill="none" stroke="#ffd95a" stroke-width="5" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6"/></svg>
+        <div class="btn"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.800-8 11-8 11z" fill="#000"/></svg>HOLD ME</div>
+      </div>
+      <div class="plate" id="plate">DON'T LET GO UNTIL IT OPENS!</div>
+    </div>
+    <canvas id="cv"></canvas><div class="flash" id="flash"></div>
+  </div>
+  <div class="lock" id="lock">
+    <div class="avatar" id="avatar">♥</div>
+    <div class="mini">♥</div>
+    <div class="lbl"><span id="lbltxt">SECURE SYSTEM ENTRY</span></div>
+    <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="pad" id="pad"></div>
+    <div class="hint" id="hint">HINT: CLICK ON IMAGE AGAIN IF YOU FORGET PASSKEY</div>
+  </div>
+</div>
+<script>
+const NEXT_URL='next.html';   // page to open after the curtains part
+const HOLD_MS=1800;           // hold duration
+const $=id=>document.getElementById(id);
+const seal=$('seal'),arc=$('arc'),cl=$('cl'),cr=$('cr'),rope=$('rope'),tassel=$('tassel'),front=$('front'),plate=$('plate'),petals=$('petals'),cv=$('cv'),stage=$('stage'),ctx=cv.getContext('2d');
+let p=0,holding=false,done=false,last=0,ang=0,parts=[],W,H,dpr=Math.min(devicePixelRatio||1,2);
+// petals
+petals.innerHTML=Array.from({length:8},(_,i)=>`<ellipse cx="0" cy="-62" rx="9" ry="15" fill="#f08fb4" opacity=".75" transform="rotate(${i*45})"/>`).join('');
+function size(){const r=stage.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+size();addEventListener('resize',size);
+function center(){const a=seal.getBoundingClientRect(),b=stage.getBoundingClientRect();return[a.left-b.left+a.width/2,a.top-b.top+a.height/2]}
+function emit(n,burst){
+  const[cx,cy]=center();
+  for(let i=0;i<n;i++){
+    const a=Math.random()*6.283,s=burst?2+Math.random()*7:.5+Math.random()*2.2+p*2;
+    const heart=Math.random()<(burst?.5:.25);
+    parts.push({x:cx+(burst?0:Math.cos(a)*50),y:cy+(burst?0:Math.sin(a)*50),vx:Math.cos(a)*s,vy:Math.sin(a)*s-(burst?3:.8),life:0,max:(burst?70:35)+Math.random()*40,
+    g:burst?.12:-.02,ch:heart?'♥':(Math.random()<.5?'✦':'•'),sz:burst?12+Math.random()*18:8+Math.random()*9,c:heart?'#ff7aa8':['#ffd95a','#fff','#ffb3d1','#fff1a8'][i%4],rot:Math.random()*6})
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  parts=parts.filter(q=>q.life<q.max);
+  for(const q of parts){
+    q.life++;q.vy+=q.g;q.x+=q.vx;q.y+=q.vy;q.vx*=.99;
+    ctx.globalAlpha=Math.max(0,1-q.life/q.max);ctx.fillStyle=q.c;ctx.shadowColor=q.c;ctx.shadowBlur=8;
+    ctx.font=q.sz+'px sans-serif';ctx.textAlign='center';ctx.fillText(q.ch,q.x,q.y);
+  }
+  ctx.globalAlpha=1;ctx.shadowBlur=0;
+}
+function render(dt){
+  const e=p*p*(3-2*p);
+  cl.style.transform=cr.style.transform=`scaleX(${1-e*.88})`;
+  arc.style.strokeDashoffset=389.6*(1-p);
+  rope.style.opacity=Math.max(0,1-p*4);
+  tassel.style.transform=`translateY(${p*30}px)`;tassel.style.opacity=Math.max(0,1-p*3);
+  ang+=dt*(.02+p*.6);petals.style.transform=`rotate(${ang}deg) scale(${1+p*.25})`;
+  const s=p>0&&!done?Math.sin(performance.now()/22)*p*3.2:0;
+  seal.style.transform=`translate(${s}px,${-s/2}px) scale(${1+p*.1})`;
+  if(holding&&!done&&Math.random()<.35+p)emit(1+(p*3|0));
+}
+function finish(){
+  done=true;holding=false;p=1;render(0);
+  front.classList.add('gone');$('flash').classList.add('go');
+  emit(90,true);setTimeout(()=>emit(60,true),250);
+  navigator.vibrate&&navigator.vibrate([40,40,80]);
+  setTimeout(openLock,1500);
+}
+function tick(t){
+  const dt=Math.min(t-last,50);last=t;
+  if(!done){p=Math.max(0,Math.min(1,p+(holding?dt/HOLD_MS:-dt/500)));render(dt);if(p>=1)finish()}
+  else render(dt);
+  draw();requestAnimationFrame(tick);
+}
+requestAnimationFrame(t=>{last=t;tick(t)});
+const start=e=>{if(done)return;e.preventDefault();holding=true;seal.classList.add('hold');plate.textContent="DON'T LET GO UNTIL IT OPENS!"};
+const stop=()=>{if(done)return;holding=false;seal.classList.remove('hold');if(p>.02)plate.textContent='TOO SOON! HOLD LONGER ♥'};
+seal.addEventListener('pointerdown',start);
+['pointerup','pointercancel','pointerleave'].forEach(n=>seal.addEventListener(n,stop));
+seal.addEventListener('contextmenu',e=>e.preventDefault());
+seal.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat)start(e)});
+seal.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')stop()});
+
+/* ---------- VAULT LOCK ---------- */
+const PASSCODE='1234';                         // <-- change your passkey
+const HINT_TEXT='HINT: IT STARTS WITH 1 ♥';    // <-- shown when the image is clicked
+const AVATAR_URL='';                           // <-- put a photo path/URL here (optional)
+let code='',busy=false,lockOn=false;
+const dotsEl=$('dots'),lbl=$('lbltxt'),hintEl=$('hint'),avatar=$('avatar');
+if(AVATAR_URL){avatar.style.backgroundImage=`url("${AVATAR_URL}")`;avatar.textContent=''}
+const keys=['1','2','3','4','5','6','7','8','9','⌫','0',''];
+$('pad').innerHTML=keys.map((k,i)=>k===''?'<div class="dotkey"></div>':`<button class="key" style="--i:${i}" data-k="${k}">${k}</button>`).join('');
+$('pad').addEventListener('click',e=>{const b=e.target.closest('.key');if(b)press(b.dataset.k)});
+function openLock(){
+  stage.style.display='none';$('lock').classList.add('show');lockOn=true;
+  document.querySelector('.bar span').textContent='VAULT.EXE';
+}
+function paint(){[...dotsEl.children].forEach((d,i)=>d.classList.toggle('on',i<code.length))}
+function say(t,ms){lbl.textContent=t;if(ms)setTimeout(()=>lbl.textContent='SECURE SYSTEM ENTRY',ms)}
+function press(k){
+  if(!lockOn||busy)return;
+  if(k==='⌫')code=code.slice(0,-1);
+  else if(code.length<4)code+=k;
+  paint();
+  if(code.length===4)setTimeout(check,260);
+}
+function check(){
+  busy=true;
+  if(code===PASSCODE){
+    dotsEl.classList.add('ok');say('ACCESS GRANTED ♥');
+    navigator.vibrate&&navigator.vibrate([30,30,60]);
+    setTimeout(()=>{document.body.classList.add('leave');setTimeout(()=>location.href=NEXT_URL,900)},1000);
+  }else{
+    dotsEl.classList.add('shake');say('WRONG PASSKEY',1400);
+    navigator.vibrate&&navigator.vibrate(200);
+    setTimeout(()=>{dotsEl.classList.remove('shake');code='';paint();busy=false},500);
+  }
+}
+avatar.addEventListener('click',()=>{hintEl.textContent=HINT_TEXT;hintEl.style.color='#ffd95a';
+  setTimeout(()=>{hintEl.textContent='HINT: CLICK ON IMAGE AGAIN IF YOU FORGET PASSKEY';hintEl.style.color=''},4000)});
+addEventListener('keydown',e=>{if(!lockOn)return;if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')press('⌫')});
+</script>
+</body>
+</html>
